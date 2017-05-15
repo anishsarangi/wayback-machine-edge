@@ -1,9 +1,7 @@
 function get_alexa_info(){
-	browser.tabs.query({active: true, currentWindow: true}, function(tabs) {
-	    var tab = tabs[0];
-	    var page_url = tab.url;
-	    if(isValidSnapshotUrl(page_url))
-	    {
+    browser.runtime.sendMessage({message: "geturl"}, function(response) {
+		if(response.status)
+		{
 			var alexa_url = 'http://xml.alexa.com/data?cli=10&dat=n&url=';
 			var page_url = page_url.replace(/^https{0,1}:\/\//, '').replace(/^www\./, '').replace(/\/.*/, '');
 			var http = new XMLHttpRequest();
@@ -34,10 +32,6 @@ function get_alexa_info(){
 			http.send(null);
 		}
 	});
-}
-function isValidSnapshotUrl(url) {
-  return ((typeof url) === "string" &&
-    (url.indexOf("http://") === 0 || url.indexOf("https://") === 0)); 
 }
 window.onload=function(){
 	document.getElementById('web_search').onclick =search_url;
